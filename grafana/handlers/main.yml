@@ -1,0 +1,11 @@
+- name: restart_prometheus_container
+  block:
+    - name: Stop prometheus container
+      docker_container:
+        name: prometheus
+        state: stopped
+
+    - name: Start prometheus container
+      docker_container:
+        name: prometheus
+        state: started

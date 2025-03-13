@@ -1,0 +1,13 @@
+- name: Grafana start
+  docker_container:
+    name: grafana
+    image: grafana/grafana-enterprise
+    state: started
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    restart_policy: always
+  tags:
+     - grafanaStart
+  when: "'one' in group_names"

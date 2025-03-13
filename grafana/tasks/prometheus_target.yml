@@ -1,0 +1,43 @@
+- name: Создаю директорию, если она не существует
+  file:
+    path: /path/to
+    state: directory
+    mode: '0755'
+  tags:
+     - prometheusStart
+  when: "'one' in group_names"
+
+- name: Меняю /добавляю target
+  copy:
+    dest: /path/to/prometheus.yml
+    content: |
+      global:
+        scrape_interval: 15s
+
+      scrape_configs:
+        - job_name: 'prometheus'
+          static_configs:
+            - targets:
+                  - '192.168.31.58:9100'
+                  - '192.168.31.59:9100'
+                  - '192.168.31.60:9100'
+    mode: '0644'
+  notify: restart_prometheus_container
+  tags:
+     - prometheusStart
+  when: "'one' in group_names"
+
+- name: Ensure Prometheus container is running
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:latest
+    state: started
+    ports:
+      - "9090:9090"
+    volumes:
+      - "/path/to/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus-data:/prometheus"
+    restart_policy: always
+  tags:
+     - prometheusStart
+  when: "'one' in group_names"

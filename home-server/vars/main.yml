@@ -1,0 +1,10 @@
+    pakages_one:
+            - ca-certificates
+            - curl
+            - python3-pip
+    pakages_two:
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
+            - docker-buildx-plugin
+            - docker-compose-plugin

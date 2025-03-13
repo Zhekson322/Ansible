@@ -1,0 +1,48 @@
+    - name: create folder /srv/gitlab
+      file:
+         path: /srv/gitlab
+         state: directory
+         mode: '0755'
+         recurse: yes
+
+    - name: "export GITLAB HOME in now bash"
+      shell: "export GITLAB_HOME=/srv/gitlab"
+
+    - name: Add GITLAB_HOME environment variable to /etc/profile
+      lineinfile:
+       path: /etc/profile
+       line: 'export GITLAB_HOME=/srv/gitlab'
+       create: yes
+       insertafter: EOF
+
+
+    - name: Create docker-compose.yml file
+      copy:
+        dest: /home/evgen/ansible/gitlab/docker-compose.yml
+        content: |
+          version: '3.6'
+          services:
+            gitlab:
+              image: gitlab/gitlab-ce:latest
+              container_name: gitlab
+              restart: always
+              hostname: 'gitlab-zhekson.com'
+              environment:
+                GITLAB_OMNIBUS_CONFIG: |
+                  external_url 'http://gitlab-zhekson.com:8929'
+                  gitlab_rails['gitlab_shell_ssh_port'] = 2222
+              ports:
+                - '8929:8929'
+                - '443:443'
+                - '2222:22'
+              volumes:
+                - '/srv/gitlab/config:/etc/gitlab'
+                - '/srv/gitlab/logs:/var/log/gitlab'
+                - '/srv/gitlab/data:/var/opt/gitlab'
+              shm_size: '256m'
+
+    - name: Deploy GitLab using Docker Compose
+      community.docker.docker_compose_v2:
+        project_src: /home/evgen/ansible/gitlab/
+        state: present
+

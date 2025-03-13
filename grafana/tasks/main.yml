@@ -1,0 +1,11 @@
+- include_tasks: node_exporter.yml
+  tags:
+    - exporterStart
+
+- include_tasks: prometheus_target.yml
+  tags:
+    - prometheusStart
+
+- include_tasks: install_grafana.yml
+  tags:
+    - grafanaStart
