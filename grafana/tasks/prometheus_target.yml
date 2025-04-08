@@ -17,12 +17,9 @@
       scrape_configs:
         - job_name: 'prometheus'
           static_configs:
-            - targets:
-                  - '192.168.31.58:9100'
-                  - '192.168.31.59:9100'
-                  - '192.168.31.60:9100'
+            - targets: {{ prometheus_targets | to_nice_json }}
     mode: '0644'
-  notify: restart_prometheus_container
+  notify: restartprometheus_container
   tags:
      - prometheusStart
   when: "'one' in group_names"

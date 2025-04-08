@@ -1,0 +1,55 @@
+- name: install kubectl + minicube
+  hosts: one
+  gather_facts: yes
+  become: yes
+  tasks:
+
+    - name: Get the latest stable version of Kubernetes
+      shell: |
+       curl -L -s https://dl.k8s.io/release/stable.txt
+      register: k8s_stable_version
+      changed_when: false
+
+    - name: Download kubectl binary
+      get_url:
+       url: "https://dl.k8s.io/release/{{ k8s_stable_version.stdout }}/bin/linux/amd64/kubectl"
+       dest: /usr/local/bin/kubectl
+       mode: '0755'
+
+    - name: Copy kubectl binary to /usr/local/bin with correct permissions
+      copy:
+       src: /usr/local/bin/kubectl  # Исходный файл (должен находиться на управляющей машине)
+       dest: /usr/local/bin/kubectl  # Целевой путь
+       owner: root  
+       group: root 
+       mode: '0755' 
+       remote_src: no 
+
+    - name: Get kubectl client version
+      command: kubectl version --client
+      register: kubectl_version
+      changed_when: false
+
+    - name: Display kubectl client version
+      debug:
+        var: kubectl_version.stdout
+
+    - name: Download Minikube binary
+      get_url:
+        url: https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+        dest: /tmp/minikube-linux-amd64
+        mode: '0755'  # Устанавливаем права на выполнение
+
+    - name: Install Minikube to /usr/local/bin
+      copy:
+        src: /tmp/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        owner: root
+        group: root
+        mode: '0755'
+        remote_src: yes  # Указываем, что файл уже находится на целевом хосте
+
+    - name: Remove temporary Minikube binary
+      file:
+        path: /tmp/minikube-linux-amd64
+        state: absent  # Удаляем временный файл

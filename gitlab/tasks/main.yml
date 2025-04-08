@@ -1,1 +1,7 @@
-- include_tasks: gitlabDocker.yml
+#- include_tasks: gitlab-runner.yml
+#  tags:
+#     - keksik
+
+- include_tasks: gitlabDocker.yml #сам гитлаб
+  tags:
+     - gitlab

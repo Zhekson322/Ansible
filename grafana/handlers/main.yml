@@ -1,4 +1,4 @@
-- name: restart_prometheus_container
+- name: restartprometheus_container
   block:
     - name: Stop prometheus container
       docker_container:

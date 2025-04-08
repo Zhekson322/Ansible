@@ -4,3 +4,15 @@
   become: yes
   roles:
         - gitlab
+  tags:
+        - gitlab
+
+
+#- name: Install gitlab-runner
+#  hosts: two,three
+#  gather_facts: yes
+#  become: yes
+#  roles:
+#        - gitlab
+#  tags:
+#        - keksik

@@ -1,0 +1,26 @@
+- name: Запуск GitLab Runner в Docker
+  docker_container:
+    name: gitlab-runner
+    image: gitlab/gitlab-runner:latest
+    state: started
+    restart_policy: always
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+  tags:
+    - keksik
+
+
+
+#
+#[[runners]]
+#  name = "my-runner"
+#  url = "http://zheksongitlab.com/"
+#  token = "YOUR_TOKEN"
+#  executor = "docker"
+#  [runners.docker]
+#    image = "alpine:latest"
+#    dns = ["192.168.31.58"]  # Укажите IP вашего DNS-сервера
+#    extra_hosts = ["zheksongitlab.com:192.168.31.58"]
+
+#после запуска gitlab-runner добавить в srv/gitlab-runner/config.toml строчки про dns и extra_hosts

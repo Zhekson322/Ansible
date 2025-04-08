@@ -1,5 +1,6 @@
 {
     "yaml.schemas": {
         "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/tasks": "file:///e%3A/otherVM/ansible/gitlab/tasks/gitlabDocker.yml"
-    }
+    },
+    "ansible.python.interpreterPath": "c:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
 }
